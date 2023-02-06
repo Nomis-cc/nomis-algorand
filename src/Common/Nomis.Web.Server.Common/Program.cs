@@ -51,7 +51,7 @@ builder.Services
 
 var scoringOptions = builder.ConfigureScoringOptions()
     .WithDefiLlamaAPI<DefiLlamaApi>()
-    .WithEvmSoulboundTokenService<EvmSoulboundToken>()
+    .WithNonEvmSoulboundTokenService<NonEvmSoulboundToken>()
     .WithAlgorandBlockchain<AlgoExplorer>()
     .Build();
 
