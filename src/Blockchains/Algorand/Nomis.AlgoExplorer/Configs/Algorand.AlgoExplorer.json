@@ -1,0 +1,18 @@
+{
+  "AlgoExplorerSettings": {
+    "NodeApiBaseUrl": "https://node.algoexplorerapi.io/",
+    "IndexerApiBaseUrl": "https://algoindexer.algoexplorerapi.io/",
+    "BlockchainDescriptor": {
+      "ChainId": 111120,
+      "ChainName": "Algorand",
+      "BlockchainName": "Algorand",
+      "BlockchainSlug": "algorand",
+      "BlockExplorerUrls": [
+        "https://algoexplorer.io/"
+      ],
+      "RPCUrls": null,
+      "IsEVMCompatible": false,
+      "SBTContractAddresses": null
+    }
+  }
+}
