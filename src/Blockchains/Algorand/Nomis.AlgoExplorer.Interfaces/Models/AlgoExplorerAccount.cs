@@ -37,7 +37,7 @@ namespace Nomis.AlgoExplorer.Interfaces.Models
         /// Assets.
         /// </summary>
         [JsonPropertyName("assets")]
-        public List<AlgoExplorerAccountAsset> Assets { get; set; } = new();
+        public IList<AlgoExplorerAccountAsset> Assets { get; set; } = new List<AlgoExplorerAccountAsset>();
 
         /// <summary>
         /// Status.

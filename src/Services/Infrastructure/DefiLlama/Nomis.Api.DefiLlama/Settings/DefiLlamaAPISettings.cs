@@ -14,7 +14,7 @@ namespace Nomis.Api.DefiLlama.Settings
     /// </summary>
     // ReSharper disable once InconsistentNaming
     internal class DefiLlamaAPISettings :
-        IAPISettings
+        IApiSettings
     {
         /// <inheritdoc/>
         public bool APIEnabled { get; set; }

@@ -36,7 +36,7 @@ namespace Nomis.Coingecko.Interfaces.Models
         /// Asset platform token detail.
         /// </summary>
         [JsonPropertyName("detail_platforms")]
-        public Dictionary<string, CoingeckoTokenPlatformDetailData> DetailPlatforms { get; set; } = new();
+        public IDictionary<string, CoingeckoTokenPlatformDetailData> DetailPlatforms { get; set; } = new Dictionary<string, CoingeckoTokenPlatformDetailData>();
 
         /// <summary>
         /// Asset platform id.
@@ -48,7 +48,7 @@ namespace Nomis.Coingecko.Interfaces.Models
         /// Image.
         /// </summary>
         [JsonPropertyName("image")]
-        public Dictionary<string, string> Image { get; set; } = new();
+        public IDictionary<string, string> Image { get; set; } = new Dictionary<string, string>();
 
         /// <summary>
         /// Contract address.

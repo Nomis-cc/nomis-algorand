@@ -24,7 +24,7 @@ namespace Nomis.Api.Common.Swagger.Filters
                 return;
             }
 
-            var versionParameter = operation.Parameters.Single(p => p.Name == "version");
+            var versionParameter = operation.Parameters.Single(p => string.Equals(p.Name, "version", StringComparison.OrdinalIgnoreCase));
             operation.Parameters.Remove(versionParameter);
         }
     }

@@ -20,7 +20,6 @@ namespace Nomis.Blockchain.Abstractions.Stats
         where TTransactionIntervalData : class, ITransactionIntervalData
     {
         private const double WalletAgePercents = 32.34 / 100;
-        private const double WalletTurnoverPercents = 16.31 / 100;
 
         /// <summary>
         /// Additional wallet stats scoring calculation functions.
@@ -56,22 +55,17 @@ namespace Nomis.Blockchain.Abstractions.Stats
         /// <summary>
         /// Wallet age (months).
         /// </summary>
-        public int WalletAge { get; set; }
-
-        /// <summary>
-        /// The movement of funds on the wallet (Native token).
-        /// </summary>
-        public decimal WalletTurnover { get; set; }
+        public int WalletAge { get; init; }
 
         /// <summary>
         /// The intervals of funds movements on the wallet.
         /// </summary>
-        public IEnumerable<TTransactionIntervalData>? TurnoverIntervals { get; set; }
+        public IEnumerable<TTransactionIntervalData>? TurnoverIntervals { get; init; }
 
         /// <summary>
         /// Wallet stats descriptions.
         /// </summary>
-        public Dictionary<string, PropertyData> StatsDescriptions { get; }
+        public IDictionary<string, PropertyData> StatsDescriptions { get; }
 
         /// <summary>
         /// Get wallet common stats score.
@@ -80,7 +74,6 @@ namespace Nomis.Blockchain.Abstractions.Stats
         public new double GetScore()
         {
             double result = WalletAgeScore(WalletAge) / 100 * WalletAgePercents;
-            result += WalletTurnoverScore(WalletTurnover) / 100 * WalletTurnoverPercents;
 
             return result;
         }
@@ -93,18 +86,6 @@ namespace Nomis.Blockchain.Abstractions.Stats
                 < 12 => 36,
                 < 24 => 60,
                 _ => 100.0
-            };
-        }
-
-        private static double WalletTurnoverScore(decimal turnover)
-        {
-            return turnover switch
-            {
-                < 10 => 2.76,
-                < 50 => 6.38,
-                < 100 => 14.71,
-                < 1000 => 33.27,
-                _ => 60.07
             };
         }
     }

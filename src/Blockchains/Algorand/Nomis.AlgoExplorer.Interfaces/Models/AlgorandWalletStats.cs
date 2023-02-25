@@ -18,7 +18,7 @@ namespace Nomis.AlgoExplorer.Interfaces.Models
     /// <summary>
     /// Algorand wallet stats.
     /// </summary>
-    public class AlgorandWalletStats :
+    public sealed class AlgorandWalletStats :
         IWalletCommonStats<AlgorandTransactionIntervalData>,
         IWalletNativeBalanceStats,
         IWalletTokenBalancesStats,
@@ -30,71 +30,74 @@ namespace Nomis.AlgoExplorer.Interfaces.Models
         public bool NoData { get; init; }
 
         /// <inheritdoc/>
+        public string NativeToken => "ALGO";
+
+        /// <inheritdoc/>
         [Display(Description = "Amount of deployed smart-contracts", GroupName = "number")]
         public int DeployedContracts { get; init; }
 
         /// <inheritdoc/>
-        [Display(Description = "Wallet native token balance", GroupName = "ALGO")]
-        public decimal NativeBalance { get; set; }
+        [Display(Description = "Wallet native token balance", GroupName = "Native token")]
+        public decimal NativeBalance { get; init; }
 
         /// <inheritdoc/>
         [Display(Description = "Wallet native token balance", GroupName = "USD")]
-        public decimal NativeBalanceUSD { get; set; }
+        public decimal NativeBalanceUSD { get; init; }
 
         /// <inheritdoc/>
         [Display(Description = "Wallet hold tokens total balance", GroupName = "USD")]
-        public decimal HoldTokensBalanceUSD => TokenBalances.Sum(b => b.TotalAmountPrice);
+        public decimal HoldTokensBalanceUSD => TokenBalances?.Sum(b => b.TotalAmountPrice) ?? 0;
 
         /// <inheritdoc/>
         [Display(Description = "Wallet age", GroupName = "months")]
-        public int WalletAge { get; set; }
+        public int WalletAge { get; init; }
 
         /// <inheritdoc/>
         [Display(Description = "Total transactions on wallet", GroupName = "number")]
-        public int TotalTransactions { get; set; }
+        public int TotalTransactions { get; init; }
 
         /// <inheritdoc/>
         [Display(Description = "Total rejected transactions on wallet", GroupName = "number")]
-        public int TotalRejectedTransactions { get; set; }
+        public int TotalRejectedTransactions { get; init; }
 
         /// <inheritdoc/>
         [Display(Description = "Average time interval between transactions", GroupName = "hours")]
-        public double AverageTransactionTime { get; set; }
+        public double AverageTransactionTime { get; init; }
 
         /// <inheritdoc/>
         [Display(Description = "Maximum time interval between transactions", GroupName = "hours")]
-        public double MaxTransactionTime { get; set; }
+        public double MaxTransactionTime { get; init; }
 
         /// <inheritdoc/>
         [Display(Description = "Minimal time interval between transactions", GroupName = "hours")]
-        public double MinTransactionTime { get; set; }
+        public double MinTransactionTime { get; init; }
 
         /// <inheritdoc/>
-        [Display(Description = "The movement of funds on the wallet", GroupName = "ALGO")]
-        public decimal WalletTurnover { get; set; }
+        [Display(Description = "The movement of funds on the wallet", GroupName = "Native token")]
+        public decimal WalletTurnover { get; init; }
 
         /// <inheritdoc/>
-        public IEnumerable<AlgorandTransactionIntervalData>? TurnoverIntervals { get; set; }
+        public IEnumerable<AlgorandTransactionIntervalData>? TurnoverIntervals { get; init; }
 
         /// <inheritdoc/>
-        [Display(Description = "The balance change value in the last month", GroupName = "ALGO")]
-        public decimal BalanceChangeInLastMonth { get; set; }
+        [Display(Description = "The balance change value in the last month", GroupName = "Native token")]
+        public decimal BalanceChangeInLastMonth { get; init; }
 
         /// <inheritdoc/>
-        [Display(Description = "The balance change value in the last year", GroupName = "ALGO")]
-        public decimal BalanceChangeInLastYear { get; set; }
+        [Display(Description = "The balance change value in the last year", GroupName = "Native token")]
+        public decimal BalanceChangeInLastYear { get; init; }
 
         /// <inheritdoc/>
         [Display(Description = "Time since last transaction", GroupName = "months")]
-        public int TimeFromLastTransaction { get; set; }
+        public int TimeFromLastTransaction { get; init; }
 
         /// <inheritdoc/>
         [Display(Description = "Last month transactions", GroupName = "number")]
-        public int LastMonthTransactions { get; set; }
+        public int LastMonthTransactions { get; init; }
 
         /// <inheritdoc/>
         [Display(Description = "Last year transactions on wallet", GroupName = "number")]
-        public int LastYearTransactions { get; set; }
+        public int LastYearTransactions { get; init; }
 
         /// <inheritdoc/>
         [Display(Description = "Average transaction per months", GroupName = "number")]
@@ -102,17 +105,18 @@ namespace Nomis.AlgoExplorer.Interfaces.Models
 
         /// <inheritdoc/>
         [Display(Description = "Value of all holding tokens", GroupName = "number")]
-        public int TokensHolding { get; set; }
+        public int TokensHolding { get; init; }
 
         /// <inheritdoc/>
         [Display(Description = "Hold tokens balances", GroupName = "collection")]
-        public IEnumerable<TokenBalanceData> TokenBalances { get; set; } = new List<TokenBalanceData>();
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public IEnumerable<TokenBalanceData>? TokenBalances { get; init; }
 
         /// <inheritdoc/>
-        public Dictionary<string, PropertyData> StatsDescriptions => GetType()
+        public IDictionary<string, PropertyData> StatsDescriptions => GetType()
             .GetProperties()
-            .Where(prop => !ExcludedStatDescriptions.Contains(prop.Name) && Attribute.IsDefined(prop, typeof(DisplayAttribute)))
-            .ToDictionary(p => p.Name, p => new PropertyData(p));
+            .Where(prop => !ExcludedStatDescriptions.Contains(prop.Name) && Attribute.IsDefined(prop, typeof(DisplayAttribute)) && !Attribute.IsDefined(prop, typeof(JsonIgnoreAttribute)))
+            .ToDictionary(p => p.Name, p => new PropertyData(p, NativeToken));
 
         /// <inheritdoc cref="IWalletCommonStats{ITransactionIntervalData}.ExcludedStatDescriptions"/>
         [JsonIgnore]

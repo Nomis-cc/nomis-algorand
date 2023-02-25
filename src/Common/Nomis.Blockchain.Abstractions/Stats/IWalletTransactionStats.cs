@@ -23,32 +23,32 @@ namespace Nomis.Blockchain.Abstractions.Stats
         /// <summary>
         /// Total transactions on wallet (number).
         /// </summary>
-        public int TotalTransactions { get; set; }
+        public int TotalTransactions { get; init; }
 
         /// <summary>
         /// Total rejected transactions on wallet (number).
         /// </summary>
-        public int TotalRejectedTransactions { get; set; }
+        public int TotalRejectedTransactions { get; init; }
 
         /// <summary>
         /// Average time interval between transactions (hours).
         /// </summary>
-        public double AverageTransactionTime { get; set; }
+        public double AverageTransactionTime { get; init; }
 
         /// <summary>
         /// Maximum time interval between transactions (hours).
         /// </summary>
-        public double MaxTransactionTime { get; set; }
+        public double MaxTransactionTime { get; init; }
 
         /// <summary>
         /// Minimal time interval between transactions (hours).
         /// </summary>
-        public double MinTransactionTime { get; set; }
+        public double MinTransactionTime { get; init; }
 
         /// <summary>
         /// Time since last transaction (months).
         /// </summary>
-        public int TimeFromLastTransaction { get; set; }
+        public int TimeFromLastTransaction { get; init; }
 
         /// <summary>
         /// Average transaction per months (number).
@@ -58,12 +58,12 @@ namespace Nomis.Blockchain.Abstractions.Stats
         /// <summary>
         /// Last month transactions (number).
         /// </summary>
-        public int LastMonthTransactions { get; set; }
+        public int LastMonthTransactions { get; init; }
 
         /// <summary>
         /// Last year transactions on wallet (number).
         /// </summary>
-        public int LastYearTransactions { get; set; }
+        public int LastYearTransactions { get; init; }
 
         /// <summary>
         /// Get wallet transaction stats score.

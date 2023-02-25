@@ -22,8 +22,8 @@ namespace Nomis.DefiLlama.Interfaces
         /// <param name="tokensId">The list of tokens id.</param>
         /// <param name="searchWidthInHours">Time range in hours on either side to find price data for token balances.</param>
         /// <returns>Returns tokens price.</returns>
-        public Task<DefiLlamaTokensPriceResponse?> GetTokensPriceAsync(
-            List<string> tokensId,
+        public Task<DefiLlamaTokensPriceResponse?> TokensPriceAsync(
+            IList<string?> tokensId,
             int searchWidthInHours = 6);
     }
 }

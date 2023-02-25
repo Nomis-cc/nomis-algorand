@@ -20,7 +20,7 @@ namespace Nomis.Blockchain.Abstractions.Stats
         /// <summary>
         /// Value of all holding tokens (number).
         /// </summary>
-        public int TokensHolding { get; set; }
+        public int TokensHolding { get; init; }
 
         /// <summary>
         /// Get wallet token stats score.

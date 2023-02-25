@@ -28,7 +28,7 @@ namespace Nomis.AlgoExplorer.Calculators
         private readonly AlgoExplorerAccount _account;
         private readonly IEnumerable<AlgoExplorerTransaction> _transactions;
         private readonly IEnumerable<AlgoExplorerAccountAsset> _assets;
-        private readonly IEnumerable<TokenBalanceData> _tokenBalances;
+        private readonly IEnumerable<TokenBalanceData>? _tokenBalances;
 
         public AlgorandStatCalculator(
             string address,
@@ -37,7 +37,7 @@ namespace Nomis.AlgoExplorer.Calculators
             AlgoExplorerAccount account,
             IEnumerable<AlgoExplorerTransaction> transactions,
             IEnumerable<AlgoExplorerAccountAsset> assets,
-            IEnumerable<TokenBalanceData> tokenBalances)
+            IEnumerable<TokenBalanceData>? tokenBalances)
         {
             _address = address;
             _balance = balance;
@@ -102,7 +102,7 @@ namespace Nomis.AlgoExplorer.Calculators
                 TimeFromLastTransaction = (int)((DateTime.UtcNow - _transactions.OrderBy(x => x.RoundTime).Last().RoundTime.ToString().ToDateTime()).TotalDays / 30),
                 DeployedContracts = contractsCreated,
                 TokensHolding = totalTokens.Count(),
-                TokenBalances = _tokenBalances.OrderByDescending(b => b.TotalAmountPrice)
+                TokenBalances = _tokenBalances?.OrderByDescending(b => b.TotalAmountPrice)
             };
         }
     }

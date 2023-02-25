@@ -15,7 +15,7 @@ namespace Nomis.Api.SoulboundToken.Settings
     /// </summary>
     // ReSharper disable once InconsistentNaming
     internal class SBTAPISettings :
-        IAPISettings
+        IApiSettings
     {
         /// <inheritdoc/>
         public bool APIEnabled { get; set; }

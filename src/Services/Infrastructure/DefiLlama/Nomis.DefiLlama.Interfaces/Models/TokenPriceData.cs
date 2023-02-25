@@ -1,5 +1,5 @@
 ﻿// ------------------------------------------------------------------------------------------------------
-// <copyright file="DefiLlamaTokenPriceData.cs" company="Nomis">
+// <copyright file="TokenPriceData.cs" company="Nomis">
 // Copyright (c) Nomis, 2023. All rights reserved.
 // The Application under the MIT license. See LICENSE file in the solution root for full license information.
 // </copyright>
@@ -14,21 +14,21 @@ namespace Nomis.DefiLlama.Interfaces.Models
     /// <summary>
     /// DefiLlama token price data.
     /// </summary>
-    public class DefiLlamaTokenPriceData
+    public class TokenPriceData
     {
         /// <summary>
-        /// Initialize <see cref="DefiLlamaTokenPriceData"/>.
+        /// Initialize <see cref="TokenPriceData"/>.
         /// </summary>
-        public DefiLlamaTokenPriceData()
+        public TokenPriceData()
         {
         }
 
         /// <summary>
-        /// Initialize <see cref="DefiLlamaTokenPriceData"/>.
+        /// Initialize <see cref="TokenPriceData"/>.
         /// </summary>
-        /// <param name="defiLlamaTokenPriceData"><see cref="DefiLlamaTokenPriceData"/>.</param>
-        public DefiLlamaTokenPriceData(
-            DefiLlamaTokenPriceData defiLlamaTokenPriceData)
+        /// <param name="defiLlamaTokenPriceData"><see cref="TokenPriceData"/>.</param>
+        public TokenPriceData(
+            TokenPriceData defiLlamaTokenPriceData)
         {
             Decimals = defiLlamaTokenPriceData.Decimals;
             Price = defiLlamaTokenPriceData.Price;
@@ -59,12 +59,12 @@ namespace Nomis.DefiLlama.Interfaces.Models
         /// Timestamp.
         /// </summary>
         [JsonPropertyName("timestamp")]
-        public ulong Timestamp { get; set; }
+        public ulong? Timestamp { get; set; }
 
         /// <summary>
         /// Last price date and time.
         /// </summary>
-        public DateTime LastPriceDateTime => Timestamp.ToString().ToDateTime();
+        public DateTime? LastPriceDateTime => Timestamp?.ToString().ToDateTime();
 
         /// <summary>
         /// Confidence.

@@ -1,7 +1,8 @@
 {
   "ApiCommonSettings": {
     "UseRateLimiting": true,
-    "UseRedisCaching": false
+    "UseRedisCaching": false,
+    "UseSwaggerCaching": true
   },
   "IpRateLimiting": {
     "EnableEndpointRateLimiting": true,

@@ -23,17 +23,17 @@ namespace Nomis.Blockchain.Abstractions.Stats
         /// <summary>
         /// Total NFTs on wallet (number).
         /// </summary>
-        public int NftHolding { get; set; }
+        public int NftHolding { get; init; }
 
         /// <summary>
         /// NFT trading activity (Native token).
         /// </summary>
-        public decimal NftTrading { get; set; }
+        public decimal NftTrading { get; init; }
 
         /// <summary>
         /// NFT worth on wallet (Native token).
         /// </summary>
-        public decimal NftWorth { get; set; }
+        public decimal NftWorth { get; init; }
 
         /// <summary>
         /// Get wallet NFT stats score.

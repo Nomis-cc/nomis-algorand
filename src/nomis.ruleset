@@ -1,6 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <RuleSet Name="Nomis Rules" Description="These rules represent Nomis preferences and enforce consistent code quality guidelines." ToolsVersion="17.0">
   <Include Path="basicdesignguidelinerules.ruleset" Action="Default" />
+  <Rules AnalyzerId="Meziantou.Analyzer" RuleNamespace="Meziantou.Analyzer">
+    <Rule Id="MA0002" Action="None" />
+    <Rule Id="MA0003" Action="None" />
+    <Rule Id="MA0009" Action="None" />
+    <Rule Id="MA0011" Action="None" />
+    <Rule Id="MA0015" Action="None" />
+    <Rule Id="MA0018" Action="None" />
+    <Rule Id="MA0025" Action="None" />
+    <Rule Id="MA0026" Action="None" />
+    <Rule Id="MA0048" Action="None" />
+    <Rule Id="MA0049" Action="None" />
+    <Rule Id="MA0051" Action="None" />
+    <Rule Id="MA0056" Action="None" />
+  </Rules>
   <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
     <Rule Id="CA1020" Action="Warning" />
     <Rule Id="CA1021" Action="Warning" />
@@ -30,6 +44,7 @@
   <Rules AnalyzerId="Microsoft.CodeAnalysis.CSharp" RuleNamespace="Microsoft.CodeAnalysis.CSharp">
     <Rule Id="AD0001" Action="Info" />
     <Rule Id="CS1591" Action="None" />
+    <Rule Id="CS8619" Action="None" />
   </Rules>
   <Rules AnalyzerId="Microsoft.CodeAnalysis.CSharp.Features" RuleNamespace="Microsoft.CodeAnalysis.CSharp.Features">
     <Rule Id="IDE0007" Action="None" />
@@ -105,6 +120,26 @@
   </Rules>
   <Rules AnalyzerId="SecurityIntelliSenseV2" RuleNamespace="SecurityIntelliSenseV2">
     <Rule Id="SecurityIntelliSenseCS" Action="None" />
+  </Rules>
+  <Rules AnalyzerId="SonarAnalyzer.CSharp" RuleNamespace="SonarAnalyzer.CSharp">
+    <Rule Id="S101" Action="None" />
+    <Rule Id="S1075" Action="None" />
+    <Rule Id="S1135" Action="None" />
+    <Rule Id="S1144" Action="Info" />
+    <Rule Id="S125" Action="None" />
+    <Rule Id="S1699" Action="None" />
+    <Rule Id="S2326" Action="None" />
+    <Rule Id="S2328" Action="None" />
+    <Rule Id="S2743" Action="None" />
+    <Rule Id="S3011" Action="None" />
+    <Rule Id="S3060" Action="None" />
+    <Rule Id="S3267" Action="Info" />
+    <Rule Id="S3458" Action="None" />
+    <Rule Id="S3875" Action="None" />
+    <Rule Id="S3925" Action="None" />
+    <Rule Id="S3928" Action="None" />
+    <Rule Id="S4035" Action="None" />
+    <Rule Id="S4487" Action="Info" />
   </Rules>
   <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
     <Rule Id="SA1000" Action="None" />

@@ -42,21 +42,21 @@ namespace Nomis.Blockchain.Abstractions.Requests
         /// Should be get from the contract.
         /// </remarks>
         /// <example>0</example>
-        [FromQuery]
+        [FromQuery(Name = "nonce")]
         public ulong Nonce { get; set; }
 
         /// <summary>
         /// Verifying deadline block timestamp.
         /// </summary>
         /// <example>133160867380732039</example>
-        [FromQuery]
+        [FromQuery(Name = "deadline")]
         public ulong Deadline { get; set; }
 
         /// <summary>
         /// Score type.
         /// </summary>
         /// <example>0</example>
-        [FromQuery]
+        [FromQuery(Name = "scoreType")]
         public ScoreType ScoreType { get; set; } = ScoreType.Finance;
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Nomis.Blockchain.Abstractions.Requests
         /// If `ScoreType = 1` and set, scoring calculate for this token.
         /// </remarks>
         /// <example>null</example>
-        [FromQuery]
+        [FromQuery(Name = "tokenAddress")]
         public string? TokenAddress
         {
             get

@@ -25,6 +25,6 @@ namespace Nomis.SoulboundTokenService.Settings
         /// <summary>
         /// Token data by score type.
         /// </summary>
-        public Dictionary<ScoreType, SoulboundTokenData> TokenData { get; set; } = new();
+        public IDictionary<ScoreType, SoulboundTokenData> TokenData { get; set; } = new Dictionary<ScoreType, SoulboundTokenData>();
     }
 }

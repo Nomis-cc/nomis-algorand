@@ -5,6 +5,7 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------------
 
+using System.Numerics;
 using System.Text.Json;
 
 using Microsoft.Extensions.Options;
@@ -21,8 +22,10 @@ using Nomis.Blockchain.Abstractions.Stats;
 using Nomis.Coingecko.Interfaces;
 using Nomis.DefiLlama.Interfaces;
 using Nomis.DefiLlama.Interfaces.Contracts;
-using Nomis.DefiLlama.Interfaces.Extensions;
-using Nomis.DefiLlama.Interfaces.Models;
+using Nomis.Dex.Abstractions.Enums;
+using Nomis.DexProviderService.Interfaces;
+using Nomis.DexProviderService.Interfaces.Extensions;
+using Nomis.DexProviderService.Interfaces.Requests;
 using Nomis.Domain.Scoring.Entities;
 using Nomis.ScoringService.Interfaces;
 using Nomis.SoulboundTokenService.Interfaces;
@@ -35,13 +38,14 @@ namespace Nomis.AlgoExplorer
     internal sealed class AlgoExplorerService :
         BlockchainDescriptor,
         IAlgorandScoringService,
-        IHasDefiLlamaChainId,
+        IHasDefiLlamaIntegration,
         ITransientService
     {
         private readonly IAlgoExplorerClient _client;
         private readonly ICoingeckoService _coingeckoService;
         private readonly IScoringService _scoringService;
         private readonly INonEvmSoulboundTokenService _soulboundTokenService;
+        private readonly IDexProviderService _dexProviderService;
         private readonly IDefiLlamaService _defiLlamaService;
 
         /// <summary>
@@ -52,6 +56,7 @@ namespace Nomis.AlgoExplorer
         /// <param name="coingeckoService"><see cref="ICoingeckoService"/>.</param>
         /// <param name="scoringService"><see cref="IScoringService"/>.</param>
         /// <param name="soulboundTokenService"><see cref="INonEvmSoulboundTokenService"/>.</param>
+        /// <param name="dexProviderService"><see cref="IDexProviderService"/>.</param>
         /// <param name="defiLlamaService"><see cref="IDefiLlamaService"/>.</param>
         public AlgoExplorerService(
             IOptions<AlgoExplorerSettings> settings,
@@ -59,6 +64,7 @@ namespace Nomis.AlgoExplorer
             ICoingeckoService coingeckoService,
             IScoringService scoringService,
             INonEvmSoulboundTokenService soulboundTokenService,
+            IDexProviderService dexProviderService,
             IDefiLlamaService defiLlamaService)
             : base(settings.Value.BlockchainDescriptor)
         {
@@ -66,11 +72,15 @@ namespace Nomis.AlgoExplorer
             _coingeckoService = coingeckoService;
             _scoringService = scoringService;
             _soulboundTokenService = soulboundTokenService;
+            _dexProviderService = dexProviderService;
             _defiLlamaService = defiLlamaService;
         }
 
         /// <inheritdoc />
         public string DefiLLamaChainId => "algorand";
+
+        /// <inheritdoc />
+        public string CoingeckoNativeTokenId => "algorand";
 
         /// <inheritdoc/>
         public async Task<Result<TWalletScore>> GetWalletStatsAsync<TWalletStatsRequest, TWalletScore, TWalletStats, TTransactionIntervalData>(
@@ -81,16 +91,16 @@ namespace Nomis.AlgoExplorer
             where TWalletStats : class, IWalletCommonStats<TTransactionIntervalData>, new()
             where TTransactionIntervalData : class, ITransactionIntervalData
         {
-            var account = await _client.GetAccountDataAsync(request.Address);
+            var account = await _client.GetAccountDataAsync(request.Address).ConfigureAwait(false);
             var balanceWei = account.Amount;
             decimal usdBalance =
-                (await _defiLlamaService.GetTokensPriceAsync(new List<string> { "coingecko:algorand" }))?.TokensPrices["coingecko:algorand"].Price * balanceWei.ToAlgo() ?? 0;
-            var transactions = (await _client.GetTransactionsAsync(request.Address)).ToList();
+                (await _defiLlamaService.TokensPriceAsync(new List<string?> { $"coingecko:{CoingeckoNativeTokenId}" }).ConfigureAwait(false))?.TokensPrices[$"coingecko:{CoingeckoNativeTokenId}"].Price * balanceWei.ToAlgo() ?? 0;
+            var transactions = (await _client.GetTransactionsAsync(request.Address).ConfigureAwait(false)).ToList();
             var assets = account.Assets;
 
             #region Tokens data
 
-            var tokensData = new List<(string TokenContractId, string TokenContractIdWithBlockchain, decimal? Balance)>();
+            var tokensData = new List<(string TokenContractId, string? TokenContractIdWithBlockchain, BigInteger? Balance)>();
             if ((request as IWalletTokensBalancesRequest)?.GetHoldTokensBalances == true)
             {
                 var assetsWithBalance = assets.Select(a => new
@@ -101,7 +111,7 @@ namespace Nomis.AlgoExplorer
                 .DistinctBy(a => a.AssetId);
                 foreach (var assetWithBalance in assetsWithBalance)
                 {
-                    decimal tokenBalance = (decimal)assetWithBalance.Amount;
+                    var tokenBalance = assetWithBalance.Amount;
                     if (tokenBalance > 0)
                     {
                         tokensData.Add((assetWithBalance.AssetId.ToString(), $"{DefiLLamaChainId}:{assetWithBalance.AssetId}", tokenBalance));
@@ -113,17 +123,15 @@ namespace Nomis.AlgoExplorer
 
             #region Tokens balances (DefiLlama)
 
-            var tokenBalances = new List<TokenBalanceData>();
-            if ((request as IWalletTokensBalancesRequest)?.GetHoldTokensBalances == true)
+            var dexTokensData = await _dexProviderService.TokensDataAsync(new TokensDataRequest
             {
-                var tokenPrices = await _defiLlamaService.GetTokensPriceAsync(
-                    tokensData.Select(t => t.TokenContractIdWithBlockchain).ToList(),
-                    (request as IWalletTokensBalancesRequest)?.SearchWidthInHours ?? 6);
-                if (tokenPrices != null)
-                {
-                    tokenBalances.AddRange(tokenPrices.GetTokenBalanceData(tokensData).ToList());
-                }
-            }
+                Blockchain = Chain.Algorand,
+                IncludeUniversalTokenLists = true,
+                FromCache = true
+            }).ConfigureAwait(false);
+
+            var tokenBalances = await _defiLlamaService
+                .TokensBalancesAsync(request as IWalletTokensBalancesRequest, tokensData, dexTokensData.Data).ConfigureAwait(false);
 
             #endregion Tokens balances
 
@@ -139,7 +147,7 @@ namespace Nomis.AlgoExplorer
 
             double score = walletStats!.GetScore<TWalletStats, TTransactionIntervalData>();
             var scoringData = new ScoringData(request.Address, request.Address, ChainId, score, JsonSerializer.Serialize(walletStats));
-            await _scoringService.SaveScoringDataToDatabaseAsync(scoringData, cancellationToken);
+            await _scoringService.SaveScoringDataToDatabaseAsync(scoringData, cancellationToken).ConfigureAwait(false);
 
             // getting signature
             ushort mintedScore = (ushort)(score * 10000);
@@ -164,7 +172,7 @@ namespace Nomis.AlgoExplorer
                     Score = score,
                     MintedScore = mintedScore,
                     Signature = signatureResult.Data.Signature
-                }, messages);
+                }, messages).ConfigureAwait(false);
         }
     }
 }

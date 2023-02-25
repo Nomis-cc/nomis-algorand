@@ -22,8 +22,10 @@ namespace Nomis.Blockchain.Abstractions.Models
         /// Initialize <see cref="PropertyData"/>.
         /// </summary>
         /// <param name="propertyInfo"><see cref="PropertyInfo"/>.</param>
+        /// <param name="nativeToken">Native token.</param>
         public PropertyData(
-            PropertyInfo propertyInfo)
+            PropertyInfo propertyInfo,
+            string nativeToken)
         {
             Label = propertyInfo.GetCustomAttribute<DisplayAttribute>()?.Name
                     ?? propertyInfo.Name.Humanize();
@@ -32,22 +34,11 @@ namespace Nomis.Blockchain.Abstractions.Models
                           ?? propertyInfo.Name.Humanize();
             Units = propertyInfo.GetCustomAttribute<DisplayAttribute>()?.GroupName
                     ?? "unknown";
-        }
 
-        /// <summary>
-        /// Initialize <see cref="PropertyData"/>.
-        /// </summary>
-        /// <param name="label">Property label.</param>
-        /// <param name="description">Property description.</param>
-        /// <param name="units">Units.</param>
-        public PropertyData(
-            string label,
-            string description,
-            string units)
-        {
-            Label = label;
-            Description = description;
-            Units = units;
+            if (Units.Equals("Native token", StringComparison.InvariantCultureIgnoreCase))
+            {
+                Units = nativeToken;
+            }
         }
 
         /// <summary>

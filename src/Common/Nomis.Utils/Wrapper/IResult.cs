@@ -15,7 +15,7 @@ namespace Nomis.Utils.Wrapper
         /// <summary>
         /// Message list.
         /// </summary>
-        List<string> Messages { get; set; }
+        IList<string> Messages { get; set; }
 
         /// <summary>
         /// Operation is successed.

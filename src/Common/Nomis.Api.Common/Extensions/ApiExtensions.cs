@@ -55,7 +55,7 @@ namespace Nomis.Api.Common.Extensions
         /// <returns>Returns <see cref="IScoringOptionsBuilder"/>.</returns>
         public static IScoringOptionsBuilder With<TSettings, TServiceRegistrar>(
             this IScoringOptionsBuilder optionsBuilder)
-            where TSettings : class, IAPISettings, new()
+            where TSettings : class, IApiSettings, new()
             where TServiceRegistrar : IServiceRegistrar, new()
         {
             // ReSharper disable once ArrangeObjectCreationWhenTypeNotEvident
@@ -205,7 +205,7 @@ namespace Nomis.Api.Common.Extensions
 
                 string[] dirFiles = Directory.GetFiles(directory, searchPattern, SearchOption.TopDirectoryOnly);
                 result.AddRange(includeOnlyForCurrentEnvironment
-                    ? dirFiles.Where(x => x.Contains($".{env}."))
+                    ? dirFiles.Where(x => x.Contains($".{env}.", StringComparison.OrdinalIgnoreCase))
                     : dirFiles);
             }
             catch (UnauthorizedAccessException ex)

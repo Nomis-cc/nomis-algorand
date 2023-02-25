@@ -63,6 +63,7 @@ namespace Nomis.Api.DefiLlama
         /// <returns>Returns tokens price.</returns>
         /// <remarks>
         /// Sample request:
+        ///
         ///     GET /api/v1/defillama/prices?tokenIds=arbitrum:0x4277f8f2c384827b5273592ff7cebd9f2c1ac258&amp;tokenIds=bsc:0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82
         /// </remarks>
         /// <response code="200">Returns tokens price.</response>
@@ -81,11 +82,11 @@ namespace Nomis.Api.DefiLlama
         [ProducesResponseType(typeof(ErrorResult<string>), StatusCodes.Status500InternalServerError)]
         [Produces(MediaTypeNames.Application.Json)]
         public async Task<IActionResult> GetDefiLlamaTokensPriceAsync(
-            [Required(ErrorMessage = "The list of tokens id should be set")] List<string> tokenIds,
+            [Required(ErrorMessage = "The list of tokens id should be set")] IList<string?> tokenIds,
             int searchWidthInHours = 6)
         {
-            var result = await _defillamaService.GetTokensPriceAsync(
-                tokenIds,
+            var result = await _defillamaService.TokensPriceAsync(
+                tokenIds.Where(t => !string.IsNullOrWhiteSpace(t)).ToList(),
                 searchWidthInHours);
             return Ok(result);
         }

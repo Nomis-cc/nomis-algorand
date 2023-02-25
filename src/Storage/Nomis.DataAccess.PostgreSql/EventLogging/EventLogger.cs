@@ -42,7 +42,7 @@ namespace Nomis.DataAccess.PostgreSql.EventLogging
             if (@event is EventLog eventLog)
             {
                 _context.EventLogs.Add(eventLog);
-                return await _context.SaveChangesAsync();
+                return await _context.SaveChangesAsync().ConfigureAwait(false);
             }
             else
             {
@@ -55,7 +55,7 @@ namespace Nomis.DataAccess.PostgreSql.EventLogging
                     changes,
                     userId);
                 _context.EventLogs.Add(thisEvent);
-                return await _context.SaveChangesAsync();
+                return await _context.SaveChangesAsync().ConfigureAwait(false);
             }
         }
     }

@@ -86,11 +86,11 @@ namespace Nomis.Blockchain.Abstractions.Contracts
 
         /// <inheritdoc cref="IBlockchainDescriptor.BlockExplorerUrls"/>
         [JsonInclude]
-        public List<string>? BlockExplorerUrls { get; set; } = new();
+        public IList<string>? BlockExplorerUrls { get; set; } = new List<string>();
 
         /// <inheritdoc cref="IBlockchainDescriptor.RPCUrls"/>
         [JsonInclude]
-        public List<string>? RPCUrls { get; set; } = new();
+        public IList<string>? RPCUrls { get; set; } = new List<string>();
 
         /// <inheritdoc cref="IBlockchainDescriptor.BlockchainSlug"/>
         [JsonInclude]
@@ -102,6 +102,6 @@ namespace Nomis.Blockchain.Abstractions.Contracts
 
         /// <inheritdoc cref="IBlockchainDescriptor.SBTContractAddresses"/>
         [JsonInclude]
-        public Dictionary<ScoreType, string>? SBTContractAddresses { get; set; } = new();
+        public IDictionary<ScoreType, string>? SBTContractAddresses { get; set; } = new Dictionary<ScoreType, string>();
     }
 }

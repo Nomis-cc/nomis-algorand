@@ -14,7 +14,7 @@ namespace Nomis.Api.Algorand.Settings
     /// </summary>
     // ReSharper disable once InconsistentNaming
     internal class AlgorandAPISettings :
-        IAPISettings
+        IApiSettings
     {
         /// <inheritdoc/>
         public bool APIEnabled { get; set; }

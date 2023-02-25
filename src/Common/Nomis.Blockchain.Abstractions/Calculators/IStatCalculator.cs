@@ -9,6 +9,7 @@ using System.Numerics;
 
 using Nomis.Blockchain.Abstractions.Models;
 using Nomis.Blockchain.Abstractions.Stats;
+using Nomis.Snapshot.Interfaces.Models;
 
 namespace Nomis.Blockchain.Abstractions.Calculators
 {
@@ -74,6 +75,45 @@ namespace Nomis.Blockchain.Abstractions.Calculators
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Get snapshot protocol votes data.
+        /// </summary>
+        /// <param name="snapshotVotes">Collection of <see cref="SnapshotVote"/>.</param>
+        /// <returns>Returns collection of <see cref="SnapshotProtocolVoteData"/>.</returns>
+        public static IEnumerable<SnapshotProtocolVoteData>? GetSnapshotProtocolVotesData(
+            IEnumerable<SnapshotVote>? snapshotVotes)
+        {
+            return snapshotVotes?
+                .GroupBy(x => x.Space?.Id)
+                .Where(x => !string.IsNullOrWhiteSpace(x.Key))
+                .Select(x => new SnapshotProtocolVoteData(
+                    x.Key!,
+                    x.FirstOrDefault()?.Space?.Name ?? string.Empty,
+                    x.FirstOrDefault()?.Space?.Avatar,
+                    x.FirstOrDefault()?.Space?.About,
+                    x.Sum(y => y.Vp ?? 0),
+                    x.Count()));
+        }
+
+        /// <summary>
+        /// Get snapshot protocol proposals data.
+        /// </summary>
+        /// <param name="snapshotProposals">Collection of <see cref="SnapshotProposal"/>.</param>
+        /// <returns>Returns collection of <see cref="SnapshotProtocolProposalData"/>.</returns>
+        public static IEnumerable<SnapshotProtocolProposalData>? GetSnapshotProtocolProposalsData(
+            IEnumerable<SnapshotProposal>? snapshotProposals)
+        {
+            return snapshotProposals?
+                .GroupBy(x => x.Space?.Id)
+                .Where(x => !string.IsNullOrWhiteSpace(x.Key))
+                .Select(x => new SnapshotProtocolProposalData(
+                    x.Key!,
+                    x.FirstOrDefault()?.Space?.Name ?? string.Empty,
+                    x.FirstOrDefault()?.Space?.Avatar,
+                    x.FirstOrDefault()?.Space?.About,
+                    x.Sum(y => y.Votes)));
         }
     }
 

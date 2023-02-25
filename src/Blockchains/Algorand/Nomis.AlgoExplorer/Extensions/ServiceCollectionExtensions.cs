@@ -11,6 +11,7 @@ using Nomis.AlgoExplorer.Interfaces;
 using Nomis.AlgoExplorer.Settings;
 using Nomis.Coingecko.Interfaces;
 using Nomis.DefiLlama.Interfaces;
+using Nomis.ScoringService.Interfaces;
 using Nomis.SoulboundTokenService.Interfaces;
 using Nomis.Utils.Extensions;
 
@@ -32,6 +33,7 @@ namespace Nomis.AlgoExplorer.Extensions
             var serviceProvider = services.BuildServiceProvider();
             var configuration = serviceProvider.GetRequiredService<IConfiguration>();
             serviceProvider.GetRequiredService<ICoingeckoService>();
+            serviceProvider.GetRequiredService<IScoringService>();
             serviceProvider.GetRequiredService<INonEvmSoulboundTokenService>();
             serviceProvider.GetRequiredService<IDefiLlamaService>();
             services.AddSettings<AlgoExplorerSettings>(configuration);

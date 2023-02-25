@@ -36,15 +36,15 @@ namespace Nomis.Coingecko
         /// <inheritdoc />
         public async Task<CoingeckoTokenContractDataResponse?> GetTokenDataAsync(
             string assetPlatformId,
-            string contractAddress)
+            string tokenContractAddress)
         {
-            var response = await _client.GetAsync($"/api/v3/coins/{assetPlatformId}/contract/{contractAddress}");
+            var response = await _client.GetAsync($"/api/v3/coins/{assetPlatformId}/contract/{tokenContractAddress}").ConfigureAwait(false);
             if (!response.IsSuccessStatusCode)
             {
                 return null;
             }
 
-            return await response.Content.ReadFromJsonAsync<CoingeckoTokenContractDataResponse?>();
+            return await response.Content.ReadFromJsonAsync<CoingeckoTokenContractDataResponse?>().ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -55,14 +55,14 @@ namespace Nomis.Coingecko
                 return 0;
             }
 
-            var response = await _client.GetAsync($"/api/v3/simple/price?ids={tokenId}&vs_currencies=usd");
+            var response = await _client.GetAsync($"/api/v3/simple/price?ids={tokenId}&vs_currencies=usd").ConfigureAwait(false);
             if (!response.IsSuccessStatusCode)
             {
                 return 0;
             }
 
-            string? usdString = (await response.Content.ReadFromJsonAsync<JsonObject>())?[tokenId]?["usd"]?.ToString();
-            if (usdString?.Contains("e-") == true)
+            string? usdString = (await response.Content.ReadFromJsonAsync<JsonObject>().ConfigureAwait(false))?[tokenId]?["usd"]?.ToString();
+            if (usdString?.Contains("e-", StringComparison.OrdinalIgnoreCase) == true)
             {
                 string[] usdSplittedString = usdString.Split('e');
                 usdString = usdSplittedString.FirstOrDefault();

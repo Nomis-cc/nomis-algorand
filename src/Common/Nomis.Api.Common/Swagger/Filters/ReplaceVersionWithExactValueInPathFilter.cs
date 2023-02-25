@@ -22,7 +22,7 @@ namespace Nomis.Api.Common.Swagger.Filters
             var paths = new OpenApiPaths();
 
             foreach ((string key, var value) in swaggerDoc.Paths)
-                paths.Add(key.Replace("v{version}", swaggerDoc.Info.Version), value);
+                paths.Add(key.Replace("v{version}", swaggerDoc.Info.Version, StringComparison.OrdinalIgnoreCase), value);
 
             swaggerDoc.Paths = paths;
         }

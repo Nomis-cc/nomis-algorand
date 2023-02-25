@@ -31,6 +31,6 @@ namespace Nomis.AlgoExplorer.Interfaces.Models
         /// Transactions.
         /// </summary>
         [JsonPropertyName("transactions")]
-        public List<AlgoExplorerTransaction> Transactions { get; set; } = new();
+        public IList<AlgoExplorerTransaction> Transactions { get; set; } = new List<AlgoExplorerTransaction>();
     }
 }

@@ -51,24 +51,24 @@ namespace Nomis.AlgoExplorer
             string request =
                 $"/v2/accounts/{address}";
 
-            var response = await _nodeClient.GetAsync(request);
+            var response = await _nodeClient.GetAsync(request).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<AlgoExplorerAccount>(new JsonSerializerOptions
                    {
                        Converters = { new BigIntegerConverter() }
                    })
-                   ?? throw new CustomException("Can't get account balance.");
+.ConfigureAwait(false) ?? throw new CustomException("Can't get account balance.");
         }
 
         /// <inheritdoc/>
         public async Task<IEnumerable<AlgoExplorerTransaction>> GetTransactionsAsync(string address)
         {
             var result = new List<AlgoExplorerTransaction>();
-            var transactionsData = await GetTransactionList(address);
+            var transactionsData = await GetTransactionList(address).ConfigureAwait(false);
             result.AddRange(transactionsData.Transactions ?? new List<AlgoExplorerTransaction>());
             while (!string.IsNullOrWhiteSpace(transactionsData.NextToken))
             {
-                transactionsData = await GetTransactionList(address, transactionsData.NextToken);
+                transactionsData = await GetTransactionList(address, transactionsData.NextToken).ConfigureAwait(false);
                 result.AddRange(transactionsData.Transactions ?? new List<AlgoExplorerTransaction>());
             }
 
@@ -87,13 +87,13 @@ namespace Nomis.AlgoExplorer
                 request = $"{request}&next={next}";
             }
 
-            var response = await _indexerClient.GetAsync(request);
+            var response = await _indexerClient.GetAsync(request).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<AlgoExplorerTransactions>(new JsonSerializerOptions
                    {
                        Converters = { new BigIntegerConverter() }
                    })
-                   ?? throw new CustomException("Can't get account transactions.");
+.ConfigureAwait(false) ?? throw new CustomException("Can't get account transactions.");
         }
     }
 }

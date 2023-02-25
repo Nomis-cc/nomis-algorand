@@ -5,32 +5,50 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------------
 
+using System.Numerics;
+
 namespace Nomis.DefiLlama.Interfaces.Models
 {
     /// <summary>
     /// Token balance data.
     /// </summary>
     public class TokenBalanceData
-        : DefiLlamaTokenPriceData
+        : TokenPriceData
     {
         /// <summary>
         /// Initialize <see cref="TokenBalanceData"/>.
         /// </summary>
-        /// <param name="defiLlamaTokenPriceData"><see cref="DefiLlamaTokenPriceData"/>.</param>
+        /// <param name="tokenPriceData"><see cref="TokenPriceData"/>.</param>
         /// <param name="tokenId">Token id.</param>
         /// <param name="defiLlamaTokenId">DefiLlama token id.</param>
         /// <param name="amount">Token balance amount.</param>
         public TokenBalanceData(
-            DefiLlamaTokenPriceData defiLlamaTokenPriceData,
+            TokenPriceData tokenPriceData,
             string tokenId,
-            string defiLlamaTokenId,
-            decimal? amount)
-            : base(defiLlamaTokenPriceData)
+            string? defiLlamaTokenId,
+            BigInteger? amount)
+            : base(tokenPriceData)
         {
-            Amount = amount ?? 0;
-            for (int i = 0; i < Decimals; i++)
+            if (amount > new BigInteger(decimal.MaxValue))
             {
-                Amount /= 10;
+                var realAmount = amount ?? 0;
+                for (int i = 0; i < Decimals; i++)
+                {
+                    realAmount /= 10;
+                }
+
+                if (realAmount <= new BigInteger(decimal.MaxValue))
+                {
+                    Amount = (decimal)realAmount;
+                }
+            }
+            else
+            {
+                Amount = (decimal)(amount ?? 0);
+                for (int i = 0; i < Decimals; i++)
+                {
+                    Amount /= 10;
+                }
             }
 
             TokenId = tokenId;
@@ -50,7 +68,7 @@ namespace Nomis.DefiLlama.Interfaces.Models
         /// <summary>
         /// DefiLlama token id.
         /// </summary>
-        public string DefiLlamaTokenId { get; }
+        public string? DefiLlamaTokenId { get; }
 
         /// <summary>
         /// Total token balance amount price.

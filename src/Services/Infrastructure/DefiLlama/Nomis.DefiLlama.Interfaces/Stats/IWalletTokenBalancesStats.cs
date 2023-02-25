@@ -19,7 +19,7 @@ namespace Nomis.DefiLlama.Interfaces.Stats
         /// <summary>
         /// Hold token balances.
         /// </summary>
-        public IEnumerable<TokenBalanceData> TokenBalances { get; set; }
+        public IEnumerable<TokenBalanceData>? TokenBalances { get; init; }
 
         /// <summary>
         /// Wallet hold tokens total balance (USD).

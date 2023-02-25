@@ -21,7 +21,7 @@ namespace Nomis.Api.Common.Swagger.Examples
         /// [ "Whoa! Calm down, cowboy! Quota exceeded. Maximum allowed: 3 per 1s. Please try again in 1 second(s)." ]
         /// ]]>
         /// </example>
-        public List<string> Messages { get; set; } = new();
+        public IList<string> Messages { get; set; } = new List<string>();
 
         /// <inheritdoc />
         /// <example>false</example>

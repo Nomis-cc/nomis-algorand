@@ -27,5 +27,10 @@ namespace Nomis.Api.Common.Settings
         /// Use Redis caching.
         /// </summary>
         public bool UseRedisCaching { get; set; }
+
+        /// <summary>
+        /// Use Swagger caching.
+        /// </summary>
+        public bool UseSwaggerCaching { get; set; }
     }
 }

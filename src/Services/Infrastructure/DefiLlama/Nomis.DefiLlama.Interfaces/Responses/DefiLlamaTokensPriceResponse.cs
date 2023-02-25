@@ -20,6 +20,6 @@ namespace Nomis.DefiLlama.Interfaces.Responses
         /// Tokens prices.
         /// </summary>
         [JsonPropertyName("coins")]
-        public Dictionary<string, DefiLlamaTokenPriceData> TokensPrices { get; set; } = new();
+        public IDictionary<string, TokenPriceData> TokensPrices { get; set; } = new Dictionary<string, TokenPriceData>();
     }
 }

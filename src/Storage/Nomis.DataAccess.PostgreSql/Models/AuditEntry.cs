@@ -39,22 +39,22 @@ namespace Nomis.DataAccess.PostgreSql.Models
         public string EntityName { get; }
 
         /// <inheritdoc/>
-        public Dictionary<string, object?> KeyValues { get; } = new();
+        public IDictionary<string, object?> KeyValues { get; } = new Dictionary<string, object?>();
 
         /// <inheritdoc/>
-        public Dictionary<string, object?> OldValues { get; } = new();
+        public IDictionary<string, object?> OldValues { get; } = new Dictionary<string, object?>();
 
         /// <inheritdoc/>
-        public Dictionary<string, object?> NewValues { get; } = new();
+        public IDictionary<string, object?> NewValues { get; } = new Dictionary<string, object?>();
 
         /// <inheritdoc/>
-        public List<PropertyEntry> TemporaryProperties { get; } = new();
+        public IList<PropertyEntry> TemporaryProperties { get; } = new List<PropertyEntry>();
 
         /// <inheritdoc/>
         public AuditType AuditType { get; set; }
 
         /// <inheritdoc/>
-        public List<string> ChangedColumns { get; } = new();
+        public IList<string> ChangedColumns { get; } = new List<string>();
 
         /// <inheritdoc/>
         public bool HasTemporaryProperties => TemporaryProperties.Count > 0;

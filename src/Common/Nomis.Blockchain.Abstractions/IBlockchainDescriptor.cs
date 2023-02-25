@@ -40,13 +40,13 @@ namespace Nomis.Blockchain.Abstractions
         /// <summary>
         /// Blockchain explorer block URLs.
         /// </summary>
-        public List<string>? BlockExplorerUrls { get; }
+        public IList<string>? BlockExplorerUrls { get; }
 
         /// <summary>
         /// RPC provider URLs.
         /// </summary>
         // ReSharper disable once InconsistentNaming
-        public List<string>? RPCUrls { get; }
+        public IList<string>? RPCUrls { get; }
 
         /// <summary>
         /// Is the blockchain compatible with the EVM.
@@ -58,6 +58,6 @@ namespace Nomis.Blockchain.Abstractions
         /// Soulbound token contract addresses.
         /// </summary>
         // ReSharper disable once InconsistentNaming
-        public Dictionary<ScoreType, string>? SBTContractAddresses { get; }
+        public IDictionary<ScoreType, string>? SBTContractAddresses { get; }
     }
 }

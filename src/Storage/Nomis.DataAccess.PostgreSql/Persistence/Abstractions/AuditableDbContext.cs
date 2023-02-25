@@ -72,7 +72,7 @@ namespace Nomis.DataAccess.PostgreSql.Persistence.Abstractions
         /// <inheritdoc/>
         public virtual async Task<int> BaseSaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            return await base.SaveChangesAsync(cancellationToken);
+            return await base.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc/>
@@ -84,7 +84,7 @@ namespace Nomis.DataAccess.PostgreSql.Persistence.Abstractions
         /// <inheritdoc cref="IAuditableDbContext"/>
         public new virtual async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            return await this.SaveChangesWithAuditAndPublishEventsAsync(_eventLogger, _mediator, _currentUserService, _entitySettings, cancellationToken);
+            return await this.SaveChangesWithAuditAndPublishEventsAsync(_eventLogger, _mediator, _currentUserService, _entitySettings, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc cref="ISupportsSavingChanges.SaveChanges"/>

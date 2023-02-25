@@ -21,6 +21,11 @@ namespace Nomis.AlgoExplorer.Interfaces.Extensions
         /// <returns>Returns total ALGO.</returns>
         public static decimal ToAlgo(this in BigInteger valueInWei)
         {
+            if (valueInWei > new BigInteger(decimal.MaxValue))
+            {
+                return (decimal)(valueInWei / new BigInteger(100_000));
+            }
+
             return (decimal)valueInWei * 0.000_001M;
         }
 

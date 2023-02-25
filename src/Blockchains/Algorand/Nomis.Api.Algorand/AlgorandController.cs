@@ -65,6 +65,7 @@ namespace Nomis.Api.Algorand
         /// <returns>An Nomis Score value and corresponding statistical data.</returns>
         /// <remarks>
         /// Sample request:
+        ///
         ///     GET /api/v1/algorand/wallet/5NPJT5RZD7SLGHON3KO5N4I7LOFN3XVHKI62WXZO3OS666BPG5RLQ7SVHQ/score?scoreType=0&amp;nonce=0&amp;deadline=133160867380732039
         /// </remarks>
         /// <response code="200">Returns Nomis Score and stats.</response>

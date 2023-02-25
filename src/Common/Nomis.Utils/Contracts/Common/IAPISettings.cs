@@ -12,7 +12,7 @@ namespace Nomis.Utils.Contracts.Common
     /// <summary>
     /// API settings.
     /// </summary>
-    public interface IAPISettings :
+    public interface IApiSettings :
         ISettings
     {
         /// <summary>

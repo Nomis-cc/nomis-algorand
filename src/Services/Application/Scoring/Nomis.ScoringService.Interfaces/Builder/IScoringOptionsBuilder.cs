@@ -20,7 +20,7 @@ namespace Nomis.ScoringService.Interfaces.Builder
         /// <summary>
         /// Collection of API settings.
         /// </summary>
-        public IEnumerable<IAPISettings> Settings { get; }
+        public IEnumerable<IApiSettings> Settings { get; }
 
         /// <summary>
         /// Create the builder instance.
@@ -43,7 +43,7 @@ namespace Nomis.ScoringService.Interfaces.Builder
         // ReSharper disable once UnusedTypeParameter
         public IScoringOptionsBuilder RegisterServices<TSettings, TServiceRegistrar>(
             TServiceRegistrar registrar)
-            where TSettings : class, IAPISettings, new()
+            where TSettings : class, IApiSettings, new()
             where TServiceRegistrar : IServiceRegistrar;
 
         /// <summary>

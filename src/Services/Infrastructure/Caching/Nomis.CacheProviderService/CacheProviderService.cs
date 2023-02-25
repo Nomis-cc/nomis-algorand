@@ -34,17 +34,17 @@ namespace Nomis.CacheProviderService
         public async Task<string?> GetFromCacheAsync(
             string key)
         {
-            return await _cache.GetStringAsync(key);
+            return await _cache.GetStringAsync(key).ConfigureAwait(false);
         }
 
         /// <inheritdoc/>
         public async Task<T?> GetFromCacheAsync<T>(
             string key)
         {
-            string? cachedResponse = await _cache.GetStringAsync(key);
+            string? cachedResponse = await _cache.GetStringAsync(key).ConfigureAwait(false);
             return cachedResponse == null
                 ? default
-                : JsonSerializer.Deserialize<T?>(cachedResponse, new JsonSerializerOptions()
+                : JsonSerializer.Deserialize<T?>(cachedResponse, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 });
@@ -56,7 +56,7 @@ namespace Nomis.CacheProviderService
             string value,
             DistributedCacheEntryOptions options)
         {
-            await _cache.SetStringAsync(key, value, options);
+            await _cache.SetStringAsync(key, value, options).ConfigureAwait(false);
         }
 
         /// <inheritdoc/>
@@ -67,13 +67,13 @@ namespace Nomis.CacheProviderService
             where T : class
         {
             string response = JsonSerializer.Serialize(value);
-            await _cache.SetStringAsync(key, response, options);
+            await _cache.SetStringAsync(key, response, options).ConfigureAwait(false);
         }
 
         /// <inheritdoc/>
         public async Task ClearCacheAsync(string key)
         {
-            await _cache.RemoveAsync(key);
+            await _cache.RemoveAsync(key).ConfigureAwait(false);
         }
     }
 }

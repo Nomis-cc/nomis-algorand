@@ -51,12 +51,12 @@ namespace Nomis.DataAccess.PostgreSql.Scoring.Persistence
         protected override string Schema => nameof(PostgreSqlConstants.Schemes.Scoring);
 
         /// <inheritdoc/>
-        protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            builder.HasDefaultSchema(Schema);
-            base.OnModelCreating(builder);
-            builder.ApplyConfigurationsFromAssembly(GetType().Assembly);
-            builder.ApplyScoringConfiguration();
+            modelBuilder.HasDefaultSchema(Schema);
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+            modelBuilder.ApplyScoringConfiguration();
         }
     }
 }

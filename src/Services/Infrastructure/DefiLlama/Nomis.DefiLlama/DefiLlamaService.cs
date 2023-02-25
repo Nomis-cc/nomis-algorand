@@ -32,19 +32,19 @@ namespace Nomis.DefiLlama
         }
 
         /// <inheritdoc />
-        public async Task<DefiLlamaTokensPriceResponse?> GetTokensPriceAsync(
-            List<string> tokensId,
-            int searchWidthInHours)
+        public async Task<DefiLlamaTokensPriceResponse?> TokensPriceAsync(
+            IList<string?> tokensId,
+            int searchWidthInHours = 6)
         {
-            string tokensIds = string.Join(',', tokensId);
+            string tokensIds = string.Join(',', tokensId.Where(t => !string.IsNullOrWhiteSpace(t)));
 
-            var response = await _client.GetAsync($"/prices/current/{tokensIds}?searchWidth={searchWidthInHours}h");
+            var response = await _client.GetAsync($"/prices/current/{tokensIds}?searchWidth={searchWidthInHours}h").ConfigureAwait(false);
             if (!response.IsSuccessStatusCode)
             {
                 return default;
             }
 
-            var result = await response.Content.ReadFromJsonAsync<DefiLlamaTokensPriceResponse>();
+            var result = await response.Content.ReadFromJsonAsync<DefiLlamaTokensPriceResponse>().ConfigureAwait(false);
             return result;
         }
     }

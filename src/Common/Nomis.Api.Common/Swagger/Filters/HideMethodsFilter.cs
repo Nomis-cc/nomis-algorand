@@ -17,14 +17,14 @@ namespace Nomis.Api.Common.Swagger.Filters
     public sealed class HideMethodsFilter :
         IDocumentFilter
     {
-        private readonly IEnumerable<IAPISettings> _apiSettings;
+        private readonly IEnumerable<IApiSettings> _apiSettings;
 
         /// <summary>
         /// Initialize <see cref="HideMethodsFilter"/>.
         /// </summary>
-        /// <param name="apiSettings">Collection of <see cref="IAPISettings"/>.</param>
+        /// <param name="apiSettings">Collection of <see cref="IApiSettings"/>.</param>
         public HideMethodsFilter(
-            IEnumerable<IAPISettings> apiSettings)
+            IEnumerable<IApiSettings> apiSettings)
         {
             _apiSettings = apiSettings;
         }

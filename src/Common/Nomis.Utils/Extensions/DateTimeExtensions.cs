@@ -5,6 +5,8 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------------
 
+using System.Globalization;
+
 namespace Nomis.Utils.Extensions
 {
     /// <summary>
@@ -19,7 +21,7 @@ namespace Nomis.Utils.Extensions
         /// <returns><see cref="DateTime"/>.</returns>
         public static DateTime ToDateTime(this string unixTimeStamp)
         {
-            long unixTimeStampLong = long.Parse(unixTimeStamp);
+            long unixTimeStampLong = long.Parse(unixTimeStamp, NumberStyles.Any, new DateTimeFormatInfo());
             var dateTimeOffSet = DateTimeOffset.FromUnixTimeSeconds(unixTimeStampLong);
             return dateTimeOffSet.DateTime;
         }

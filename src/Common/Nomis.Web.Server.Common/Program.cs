@@ -9,24 +9,44 @@ using System.Reflection;
 
 using AspNetCoreRateLimit;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Nomis.Aave;
 using Nomis.AlgoExplorer;
+using Nomis.Api.Aave.Extensions;
 using Nomis.Api.Algorand.Extensions;
+using Nomis.Api.Chainanalysis.Extensions;
 using Nomis.Api.Common.Extensions;
 using Nomis.Api.Common.Middlewares;
+using Nomis.Api.Common.Settings;
 using Nomis.Api.Common.Swagger.Filters;
 using Nomis.Api.DefiLlama.Extensions;
+using Nomis.Api.DexAggregator.Extensions;
+using Nomis.Api.Greysafe.Extensions;
+using Nomis.Api.Hapi.Extensions;
+using Nomis.Api.Rapyd.Extensions;
+using Nomis.Api.Snapshot.Extensions;
 using Nomis.Api.SoulboundToken.Extensions;
+using Nomis.Api.Tatum.Extensions;
 using Nomis.CacheProviderService.Extensions;
+using Nomis.Chainanalysis;
 using Nomis.Coingecko.Extensions;
 using Nomis.CurrentUserService.Extensions;
 using Nomis.DataAccess.PostgreSql.Extensions;
 using Nomis.DataAccess.PostgreSql.Scoring.Extensions;
 using Nomis.DefiLlama;
+using Nomis.DexProviderService;
+using Nomis.Greysafe;
+using Nomis.HapiExplorer;
+using Nomis.Rapyd;
 using Nomis.ScoringService.Extensions;
+using Nomis.Snapshot;
 using Nomis.SoulboundTokenService;
+using Nomis.Tatum;
+using Nomis.Utils.Extensions;
 using Nomis.Web.Server.Common.Extensions;
 using Serilog;
 using Swashbuckle.AspNetCore.Filters;
+using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
@@ -51,8 +71,17 @@ builder.Services
 
 var scoringOptions = builder.ConfigureScoringOptions()
     .WithDefiLlamaAPI<DefiLlamaApi>()
+    .WithTatumAPI<TatumApi>()
+    .WithSnapshotProtocol<SnapshotHub>()
+    .WithAaveLendingProtocol<Aave>()
+    .WithHAPIProtocol<HapiExplorer>()
+    .WithGreysafeService<Greysafe>()
+    .WithChainanalysisService<Chainanalysis>()
     .WithNonEvmSoulboundTokenService<NonEvmSoulboundToken>()
+    .WithEvmSoulboundTokenService<EvmSoulboundToken>()
+    .WithRapydPaymentAPI<RapydApi>()
     .WithAlgorandBlockchain<AlgoExplorer>()
+    .WithDexAggregator<DexProviderRegistrar>()
     .Build();
 
 builder.Services
@@ -162,8 +191,8 @@ builder.Services.AddSwaggerGen(options =>
             .SelectMany(attr => attr.Versions)
             .ToList();
 
-        return versions?.Any(v => $"v{v}" == version) == true
-               && (maps.Count == 0 || maps.Any(v => $"v{v}" == version));
+        return versions?.Any(v => string.Equals($"v{v}", version, StringComparison.OrdinalIgnoreCase)) == true
+               && (maps.Count == 0 || maps.Any(v => string.Equals($"v{v}", version, StringComparison.OrdinalIgnoreCase)));
     });
 
     #endregion Add Versioning
@@ -179,6 +208,13 @@ builder.Services.AddSwaggerGen(options =>
     options.DocumentFilter<TagOrderByNameDocumentFilter>();
 });
 builder.Services.AddSwaggerExamplesFromAssemblies(Assembly.GetExecutingAssembly());
+
+builder.Services.AddSettings<ApiCommonSettings>(builder.Configuration);
+var apiCommonSettings = builder.Configuration.GetSettings<ApiCommonSettings>();
+if (apiCommonSettings.UseSwaggerCaching)
+{
+    builder.Services.Replace(ServiceDescriptor.Transient<ISwaggerProvider, CachingSwaggerProvider>());
+}
 
 builder.Services.AddHealthChecks();
 

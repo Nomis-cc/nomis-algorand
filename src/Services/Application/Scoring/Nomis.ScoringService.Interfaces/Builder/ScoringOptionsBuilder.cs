@@ -19,7 +19,7 @@ namespace Nomis.ScoringService.Interfaces.Builder
     {
         private readonly IServiceCollection _services;
         private readonly IConfiguration _configuration;
-        private readonly List<IAPISettings> _settings = new();
+        private readonly List<IApiSettings> _settings = new();
         private readonly List<IServiceRegistrar> _registrars = new();
 
         /// <summary>
@@ -36,12 +36,12 @@ namespace Nomis.ScoringService.Interfaces.Builder
         }
 
         /// <inheritdoc />
-        public IEnumerable<IAPISettings> Settings => _settings;
+        public IEnumerable<IApiSettings> Settings => _settings;
 
         /// <inheritdoc />
         public IScoringOptionsBuilder RegisterServices<TSettings, TServiceRegistrar>(
             TServiceRegistrar registrar)
-            where TSettings : class, IAPISettings, new()
+            where TSettings : class, IApiSettings, new()
             where TServiceRegistrar : IServiceRegistrar
         {
             var settings = _configuration.GetSettings<TSettings>();

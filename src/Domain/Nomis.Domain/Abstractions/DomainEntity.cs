@@ -123,7 +123,7 @@ namespace Nomis.Domain.Abstractions
         // ReSharper disable once NonReadonlyMemberInGetHashCode
 
         /// <inheritdoc/>
-        public override int GetHashCode() => (GetRealType().ToString() + Id).GetHashCode();
+        public override int GetHashCode() => (GetRealType().ToString() + Id).GetHashCode(StringComparison.OrdinalIgnoreCase);
 
         /// <inheritdoc/>
         public virtual void CheckRule(IBusinessRule rule) => (this as IDomainEntity).CheckRule(rule);
